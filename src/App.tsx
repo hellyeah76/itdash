@@ -111,6 +111,7 @@ function App() {
   };
 
   const saveUser = async (userData: User) => {
+    console.log('Saving user data:', userData); // Log the user data being sent
     try {
       const response = await fetch('/api/users', {
         method: 'POST',
