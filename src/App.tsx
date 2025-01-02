@@ -111,14 +111,25 @@ function App() {
     setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
-  const saveUsers = (users: User[]) => {
-    fetch('/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(users),
-    });
+  const saveUser = async (userData) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const result = await response.text();
+      console.log('Server response:', result);
+    } catch (error) {
+      console.error('Error saving user:', error);
+    }
   };
 
   const handleSort = () => {
