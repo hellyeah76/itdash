@@ -1,47 +1,40 @@
+// filepath: /c:/Users/IT Jaringan/Desktop/proj/proj1/api/server.js
 import express from 'express';
-import fs from 'fs';
-import path from 'path';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import Database from 'better-sqlite3';
 
 const app = express();
-const dataFilePath = path.join(__dirname, 'data.json');
-const devicesFilePath = path.join(__dirname, 'devices.json');
+const db = new Database('data.db', { verbose: console.log });
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    division TEXT,
+    problem TEXT,
+    solving TEXT,
+    date TEXT,
+    device TEXT
+  );
+`);
 
 app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/api/users', (req, res) => {
-  fs.readFile(dataFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).send('Error reading data');
-    }
-    res.send(JSON.parse(data));
-  });
-});
-
-app.get('/api/devices', (req, res) => {
-  fs.readFile(devicesFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).send('Error reading devices');
-    }
-    res.send(JSON.parse(data));
-  });
+  const users = db.prepare('SELECT * FROM users').all();
+  res.json(users);
 });
 
 app.post('/api/users', (req, res) => {
   const users = req.body;
-  fs.writeFile(dataFilePath, JSON.stringify(users, null, 2), (err) => {
-    if (err) {
-      return res.status(500).send('Error saving data');
-    }
-    res.send('Data saved successfully');
+  db.prepare('DELETE FROM users').run();
+  const insert = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
+  users.forEach(user => {
+    insert.run(user.name, user.division, user.problem, user.solving, user.date, user.device);
   });
+  res.send('Data saved successfully');
 });
 
 app.listen(5000, () => {
