@@ -1,4 +1,3 @@
-// filepath: /C:/Users/IT Jaringan/Desktop/proj/proj1/api/server.js
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -43,6 +42,10 @@ app.post('/api/users', (req, res) => {
     }
     res.send('Data saved successfully');
   });
+});
+
+app.listen(5000, () => {
+  console.log('Server is running on port 5000');
 });
 
 export default app;
