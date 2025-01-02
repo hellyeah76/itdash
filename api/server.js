@@ -10,8 +10,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const dataFilePath = path.join(__dirname, '..', 'src', 'data.json');
-const devicesFilePath = path.join(__dirname, '..', 'src', 'devices.json');
+const dataFilePath = path.join(__dirname, 'data.json');
+const devicesFilePath = path.join(__dirname, 'devices.json');
 
 app.use(bodyParser.json());
 app.use(cors());
