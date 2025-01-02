@@ -77,23 +77,19 @@ function App() {
   };
 
   const handleAdd = () => {
-    const newUsers = [{ ...form, id: users.length + 1 }, ...users];
-    setUsers(newUsers);
     saveUser(form); // Save the new user to the server
     setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
   const handleUpdate = (id: number) => {
-    const updatedUsers = users.map(user => (user.id === id ? form : user));
-    setUsers(updatedUsers);
-    saveUser(form); // Save the updated user to the server
+    updateUser(id, form); // Save the updated user to the server
     setEditingId(null);
   };
 
   const handleDelete = (id: number) => {
     const filteredUsers = users.filter(user => user.id !== id);
     setUsers(filteredUsers);
-    // Optionally, you can add a function to delete the user from the server
+    deleteUser(id); // Delete the user from the server
   };
 
   const handleEdit = (user: User) => {
@@ -101,9 +97,12 @@ function App() {
     setEditingId(user.id);
   };
 
-  const handleSave = (id: number) => {
-    handleUpdate(id);
-    setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
+  const handleSave = () => {
+    if (editingId) {
+      handleUpdate(editingId);
+    } else {
+      handleAdd();
+    }
   };
 
   const handleCancel = () => {
@@ -125,10 +124,45 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.text();
-      console.log('Server response:', result);
+      const newUser = await response.json();
+      setUsers([...users, newUser]);
     } catch (error) {
       console.error('Error saving user:', error);
+    }
+  };
+
+  const updateUser = async (id: number, userData: User) => {
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedUser = await response.json();
+      setUsers(users.map(user => (user.id === id ? updatedUser : user)));
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const deleteUser = async (id: number) => {
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
     }
   };
 
