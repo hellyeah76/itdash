@@ -113,7 +113,7 @@ function App() {
   const saveUser = async (userData: User) => {
     console.log('Saving user data:', userData); // Log the user data being sent
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch('https://itdash.vercel.app/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
