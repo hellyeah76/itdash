@@ -35,11 +35,13 @@ db.exec(`
 
 app.get('/api/users', (req, res) => {
   const users = db.prepare('SELECT * FROM users').all();
+  console.log('Users:', users); // Log users to console
   res.send(users);
 });
 
 app.get('/api/devices', (req, res) => {
   const devices = db.prepare('SELECT * FROM devices').all();
+  console.log('Devices:', devices); // Log devices to console
   res.send(devices);
 });
 
@@ -47,6 +49,7 @@ app.post('/api/users', (req, res) => {
   const { name, division, problem, solving, date, device } = req.body;
   const stmt = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
   stmt.run(name, division, problem, solving, date, device);
+  console.log('Inserted user:', { name, division, problem, solving, date, device }); // Log inserted user to console
   res.send('Data saved successfully');
 });
 
