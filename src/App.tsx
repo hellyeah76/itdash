@@ -119,13 +119,19 @@ function App() {
         },
         body: JSON.stringify(userData),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const newUser = await response.json();
-      setUsers([...users, newUser]);
+  
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const newUser = await response.json();
+        setUsers([...users, newUser]);
+      } else {
+        const text = await response.text();
+        console.log('Response text:', text);
+      }
     } catch (error) {
       console.error('Error saving user:', error);
     }
