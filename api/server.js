@@ -2,20 +2,14 @@ import express from 'express';
 import Database from 'better-sqlite3';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const app = express();
-const dbFilePath = join(__dirname, 'database.sqlite');
-const db = new Database(dbFilePath); // Use a file-based database
+const db = new Database(':memory:'); // Use an in-memory database
 
 app.use(bodyParser.json());
 app.use(cors());
 
-// Create tables and seed initial data if they don't exist
+// Create tables and seed initial data
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,7 +26,7 @@ db.exec(`
     name TEXT
   );
 
-  INSERT OR IGNORE INTO devices (name) VALUES 
+  INSERT INTO devices (name) VALUES 
     ('PC'), ('Laptop'), ('Printer'), ('Mini PC'), ('Mouse'), ('Keyboard'), 
     ('Monitor'), ('Access Point'), ('SWOS'), ('Internet'), ('LAN'), 
     ('Mikrotik'), ('Modem'), ('Server'), ('NAS'), ('Scanner'), 
