@@ -40,7 +40,7 @@ function App() {
   useEffect(() => {
     console.log('Fetching data...');
     setLoading(true);
-    fetch('{API_BASE_URL}/users')
+    fetch(`${API_BASE_URL}/users`)
       .then(response => response.json())
       .then(data => {
         console.log('Data fetched:', data);
@@ -53,7 +53,7 @@ function App() {
         setLoading(false);
       });
 
-    fetch('${API_BASE_URL}/devices')
+    fetch(`${API_BASE_URL}/devices`)
       .then(response => response.json())
       .then(data => {
         console.log('Devices fetched:', data);
@@ -112,7 +112,7 @@ function App() {
   };
 
   const saveUsers = (users: User[]) => {
-    fetch('${API_BASE_URL}/users', {
+    fetch(`${API_BASE_URL}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
