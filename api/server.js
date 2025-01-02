@@ -1,3 +1,4 @@
+// filepath: /C:/Users/IT Jaringan/Desktop/proj/proj1/api/server.js
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -10,9 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = 5000;
-const dataFilePath = path.join(__dirname, 'src', 'data.json');
-const devicesFilePath = path.join(__dirname, 'src', 'devices.json');
+const dataFilePath = path.join(__dirname, '..', 'src', 'data.json');
+const devicesFilePath = path.join(__dirname, '..', 'src', 'devices.json');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -25,6 +25,7 @@ app.get('/api/users', (req, res) => {
     res.send(JSON.parse(data));
   });
 });
+
 app.get('/api/devices', (req, res) => {
   fs.readFile(devicesFilePath, 'utf8', (err, data) => {
     if (err) {
@@ -44,6 +45,4 @@ app.post('/api/users', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+export default app;
