@@ -1,4 +1,3 @@
-// filepath: /c:/Users/IT Jaringan/Desktop/proj/proj1/api/server.js
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -25,6 +24,17 @@ app.use(cors());
 app.get('/api/users', (req, res) => {
   const users = db.prepare('SELECT * FROM users').all();
   res.json(users);
+});
+
+app.get('/api/devices', (req, res) => {
+  const devices = [
+    { id: 1, name: 'PC' },
+    { id: 2, name: 'Laptop' },
+    { id: 3, name: 'Printer' },
+    { id: 4, name: 'Mini PC' },
+    { id: 5, name: 'Mouse' }
+  ];
+  res.json(devices);
 });
 
 app.post('/api/users', (req, res) => {
