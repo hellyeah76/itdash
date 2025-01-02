@@ -79,21 +79,21 @@ function App() {
   const handleAdd = () => {
     const newUsers = [{ ...form, id: users.length + 1 }, ...users];
     setUsers(newUsers);
-    saveUsers(newUsers);
+    saveUser(form); // Save the new user to the server
     setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
   const handleUpdate = (id: number) => {
     const updatedUsers = users.map(user => (user.id === id ? form : user));
     setUsers(updatedUsers);
-    saveUsers(updatedUsers);
+    saveUser(form); // Save the updated user to the server
     setEditingId(null);
   };
 
   const handleDelete = (id: number) => {
     const filteredUsers = users.filter(user => user.id !== id);
     setUsers(filteredUsers);
-    saveUsers(filteredUsers);
+    // Optionally, you can add a function to delete the user from the server
   };
 
   const handleEdit = (user: User) => {
@@ -111,7 +111,7 @@ function App() {
     setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
-  const saveUser = async (userData) => {
+  const saveUser = async (userData: User) => {
     try {
       const response = await fetch('/api/users', {
         method: 'POST',
@@ -120,11 +120,11 @@ function App() {
         },
         body: JSON.stringify(userData),
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const result = await response.text();
       console.log('Server response:', result);
     } catch (error) {
