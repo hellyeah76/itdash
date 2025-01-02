@@ -1,47 +1,59 @@
 import express from 'express';
-import fs from 'fs';
-import path from 'path';
+import Database from 'better-sqlite3';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const dataFilePath = path.join(__dirname, 'data.json');
-const devicesFilePath = path.join(__dirname, 'devices.json');
+const dbFilePath = join(__dirname, 'database.sqlite');
+const db = new Database(dbFilePath); // Use a file-based database
 
 app.use(bodyParser.json());
 app.use(cors());
 
+// Create tables and seed initial data if they don't exist
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    division TEXT,
+    problem TEXT,
+    solving TEXT,
+    date TEXT,
+    device TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS devices (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+  );
+
+  INSERT OR IGNORE INTO devices (name) VALUES 
+    ('PC'), ('Laptop'), ('Printer'), ('Mini PC'), ('Mouse'), ('Keyboard'), 
+    ('Monitor'), ('Access Point'), ('SWOS'), ('Internet'), ('LAN'), 
+    ('Mikrotik'), ('Modem'), ('Server'), ('NAS'), ('Scanner'), 
+    ('Charger'), ('HP'), ('CCTV');
+`);
+
 app.get('/api/users', (req, res) => {
-  fs.readFile(dataFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).send('Error reading data');
-    }
-    res.send(JSON.parse(data));
-  });
+  const users = db.prepare('SELECT * FROM users').all();
+  res.send(users);
 });
 
 app.get('/api/devices', (req, res) => {
-  fs.readFile(devicesFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).send('Error reading devices');
-    }
-    res.send(JSON.parse(data));
-  });
+  const devices = db.prepare('SELECT * FROM devices').all();
+  res.send(devices);
 });
 
 app.post('/api/users', (req, res) => {
-  const users = req.body;
-  fs.writeFile(dataFilePath, JSON.stringify(users, null, 2), (err) => {
-    if (err) {
-      return res.status(500).send('Error saving data');
-    }
-    res.send('Data saved successfully');
-  });
+  const { name, division, problem, solving, date, device } = req.body;
+  const stmt = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
+  stmt.run(name, division, problem, solving, date, device);
+  res.send('Data saved successfully');
 });
 
 app.listen(5000, () => {
