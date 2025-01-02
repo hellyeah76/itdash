@@ -1,0 +1,78 @@
+[
+    {
+      "id": 1,
+      "name": "PC"
+    },
+    {
+      "id": 2,
+      "name": "Laptop"
+    },
+    {
+      "id": 3,
+      "name": "Printer"
+    },
+    {
+      "id": 4,
+      "name": "Mini PC"
+    },
+    {
+      "id": 5,
+      "name": "Mouse"
+    },
+    {
+      "id": 6,
+      "name": "Keyboard"
+    },
+    {
+      "id": 7,
+      "name": "Monitor"
+    },
+    {
+      "id": 8,
+      "name": "Accest Point"
+    },
+    {
+      "id": 9,
+      "name": "SWOS"
+    },
+    {
+      "id": 10,
+      "name": "Internet"
+    },
+    {
+      "id": 11,
+      "name": "LAN"
+    },
+    {
+      "id": 12,
+      "name": "Mikrotik"
+    },
+    {
+      "id": 13,
+      "name": "Modem"
+    },
+    {
+      "id": 14,
+      "name": "Server"
+    },
+    {
+      "id": 15,
+      "name": "Modem"
+    },
+    {
+      "id": 16,
+      "name": "NAS"
+    },
+    {
+      "id": 17,
+      "name": "Scanner"
+    },
+    {
+      "id": 18,
+      "name": "Charger"
+    },
+    {
+      "id": 19,
+      "name": "HP"
+    }
+  ]

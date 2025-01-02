@@ -1,0 +1,92 @@
+[
+  {
+    "id": 10,
+    "name": "anif",
+    "division": "QA",
+    "problem": "maintenance laptop",
+    "solving": "input kredensial",
+    "date": "2025-01-02T09:17:12.932Z",
+    "device": "Laptop"
+  },
+  {
+    "id": 9,
+    "name": "",
+    "division": "layout",
+    "problem": "maintenance pc",
+    "solving": "buka akses folder 2025",
+    "date": "2025-01-02T09:15:45.388Z",
+    "device": "PC"
+  },
+  {
+    "id": 8,
+    "name": "",
+    "division": "printing",
+    "problem": "aktivasi office",
+    "solving": "crack office",
+    "date": "2025-01-02T09:15:23.621Z",
+    "device": "PC"
+  },
+  {
+    "id": 7,
+    "name": "",
+    "division": "branch internal",
+    "problem": "maintenance mini pc",
+    "solving": "maintenance mini pc",
+    "date": "2025-01-02T09:14:51.085Z",
+    "device": "Mini PC"
+  },
+  {
+    "id": 6,
+    "name": "",
+    "division": "timbul",
+    "problem": "maintenance cctv",
+    "solving": "maintenance kabel putus",
+    "date": "2025-01-02T09:14:20.221Z",
+    "device": ""
+  },
+  {
+    "id": 5,
+    "name": "cs desain 9",
+    "division": "cs desain",
+    "problem": "maintenance nas 2025",
+    "solving": "mapping folder 2025",
+    "date": "2025-01-02T09:13:41.157Z",
+    "device": "PC"
+  },
+  {
+    "id": 4,
+    "name": "zendy",
+    "division": "staff logistik",
+    "problem": "maintenance laptop",
+    "solving": "reconnect lan laptop",
+    "date": "2025-01-02T09:13:10.957Z",
+    "device": "Laptop"
+  },
+  {
+    "id": 3,
+    "name": "inggid",
+    "division": "qc",
+    "problem": "maintenance scanner",
+    "solving": "penggantian scanner",
+    "date": "2025-01-02T09:12:34.678Z",
+    "device": "Scanner"
+  },
+  {
+    "id": 2,
+    "name": "anom",
+    "division": "staff printing",
+    "problem": "maintenance printer",
+    "solving": "refill tinta",
+    "date": "2025-01-02T09:11:49.621Z",
+    "device": "Printer"
+  },
+  {
+    "id": 1,
+    "name": "",
+    "division": "perwira jaga",
+    "problem": "maintenance mini pc musik",
+    "solving": "restart mini pc",
+    "date": "2025-01-02T08:52:16.569Z",
+    "device": "Mini PC"
+  }
+]
