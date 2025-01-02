@@ -2,14 +2,27 @@ import express from 'express';
 import Database from 'better-sqlite3';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const db = new Database(':memory:'); // Use an in-memory database
+const dataFilePath = path.join(__dirname, 'data.json');
 
 app.use(bodyParser.json());
 app.use(cors());
 
-// Create tables and seed initial data
+const readData = () => {
+  const data = fs.readFileSync(dataFilePath, 'utf-8');
+  return JSON.parse(data);
+};
+
+// Create tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,13 +38,14 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT
   );
-
-  INSERT INTO devices (name) VALUES 
-    ('PC'), ('Laptop'), ('Printer'), ('Mini PC'), ('Mouse'), ('Keyboard'), 
-    ('Monitor'), ('Access Point'), ('SWOS'), ('Internet'), ('LAN'), 
-    ('Mikrotik'), ('Modem'), ('Server'), ('NAS'), ('Scanner'), 
-    ('Charger'), ('HP'), ('CCTV');
 `);
+
+// Seed initial data from data.json
+const initialData = readData();
+const insertDeviceStmt = db.prepare('INSERT INTO devices (name) VALUES (?)');
+initialData.devices.forEach(device => {
+  insertDeviceStmt.run(device);
+});
 
 app.get('/api/users', (req, res) => {
   const users = db.prepare('SELECT * FROM users').all();
@@ -47,6 +61,13 @@ app.get('/api/devices', (req, res) => {
 
 app.post('/api/users', (req, res) => {
   const { name, division, problem, solving, date, device } = req.body;
+  console.log('Received data:', { name, division, problem, solving, date, device }); // Log received data to console
+
+  if (!name || !division || !problem || !solving || !date || !device) {
+    console.error('Missing required fields');
+    return res.status(400).send('Missing required fields');
+  }
+
   const stmt = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
   stmt.run(name, division, problem, solving, date, device);
   console.log('Inserted user:', { name, division, problem, solving, date, device }); // Log inserted user to console

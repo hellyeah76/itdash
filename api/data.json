@@ -1,29 +1,9 @@
-[
-  {
-    "id": 3,
-    "name": "inggid",
-    "division": "qc",
-    "problem": "maintenance scanner qc",
-    "solving": "penggantian scanner error",
-    "date": "2025-01-02T13:23:21.178Z",
-    "device": "Scanner"
-  },
-  {
-    "id": 2,
-    "name": "anom",
-    "division": "staff printing",
-    "problem": "maintenance printer staff printing",
-    "solving": "isi ulang tinta printer",
-    "date": "2025-01-02T13:23:00.236Z",
-    "device": "Printer"
-  },
-  {
-    "id": 1,
-    "name": "",
-    "division": "perwira jaga",
-    "problem": "maintenance mini pc musik",
-    "solving": "restart mini pc dan reconnect internet",
-    "date": "2025-01-02T13:21:39.070Z",
-    "device": "Mini PC"
-  }
-]
+{
+  "users": [],
+  "devices": [
+    "PC", "Laptop", "Printer", "Mini PC", "Mouse", "Keyboard",
+    "Monitor", "Access Point", "SWOS", "Internet", "LAN",
+    "Mikrotik", "Modem", "Server", "NAS", "Scanner",
+    "Charger", "HP", "CCTV"
+  ]
+}
