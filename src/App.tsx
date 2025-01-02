@@ -77,19 +77,23 @@ function App() {
   };
 
   const handleAdd = () => {
-    saveUser(form); // Save the new user to the server
+    const newUsers = [{ ...form, id: users.length + 1 }, ...users];
+    setUsers(newUsers);
+    saveUsers(newUsers);
     setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
   const handleUpdate = (id: number) => {
-    updateUser(id, form); // Save the updated user to the server
+    const updatedUsers = users.map(user => (user.id === id ? form : user));
+    setUsers(updatedUsers);
+    saveUsers(updatedUsers);
     setEditingId(null);
   };
 
   const handleDelete = (id: number) => {
     const filteredUsers = users.filter(user => user.id !== id);
     setUsers(filteredUsers);
-    deleteUser(id); // Delete the user from the server
+    saveUsers(filteredUsers);
   };
 
   const handleEdit = (user: User) => {
@@ -97,12 +101,9 @@ function App() {
     setEditingId(user.id);
   };
 
-  const handleSave = () => {
-    if (editingId) {
-      handleUpdate(editingId);
-    } else {
-      handleAdd();
-    }
+  const handleSave = (id: number) => {
+    handleUpdate(id);
+    setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
   const handleCancel = () => {
@@ -110,67 +111,14 @@ function App() {
     setForm({ id: 0, name: '', division: '', problem: '', solving: '', date: new Date(), device: '' });
   };
 
-  const saveUser = async (userData: User) => {
-    console.log('Saving user data:', userData); // Log the user data being sent
-    try {
-      const response = await fetch('https://itdash.vercel.app/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const newUser = await response.json();
-        setUsers([...users, newUser]);
-      } else {
-        const text = await response.text();
-        console.log('Response text:', text);
-      }
-    } catch (error) {
-      console.error('Error saving user:', error);
-    }
-  };
-
-  const updateUser = async (id: number, userData: User) => {
-    try {
-      const response = await fetch(`/api/users/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const updatedUser = await response.json();
-      setUsers(users.map(user => (user.id === id ? updatedUser : user)));
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
-  };
-
-  const deleteUser = async (id: number) => {
-    try {
-      const response = await fetch(`/api/users/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
+  const saveUsers = (users: User[]) => {
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(users),
+    });
   };
 
   const handleSort = () => {
@@ -422,7 +370,7 @@ function App() {
                               {editingId === user.id ? (
                                 <>
                                   <button
-                                    onClick={handleSave}
+                                    onClick={() => handleSave(user.id)}
                                     className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 my-1"
                                   >
                                     Save

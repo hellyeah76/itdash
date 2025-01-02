@@ -64,19 +64,14 @@ app.post('/api/users', (req, res) => {
   console.log('Received data:', { name, division, problem, solving, date, device }); // Log received data to console
 
   if (!name || !division || !problem || !solving || !date || !device) {
-    console.error('Missing required fields:', { name, division, problem, solving, date, device });
+    console.error('Missing required fields');
     return res.status(400).send('Missing required fields');
   }
 
-  try {
-    const stmt = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
-    stmt.run(name, division, problem, solving, date, device);
-    console.log('Inserted user:', { name, division, problem, solving, date, device }); // Log inserted user to console
-    res.send('Data saved successfully');
-  } catch (error) {
-    console.error('Error inserting user:', error);
-    res.status(500).send('Error inserting user');
-  }
+  const stmt = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
+  stmt.run(name, division, problem, solving, date, device);
+  console.log('Inserted user:', { name, division, problem, solving, date, device }); // Log inserted user to console
+  res.send('Data saved successfully');
 });
 
 app.listen(5000, () => {
