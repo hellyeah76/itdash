@@ -1,13 +1,12 @@
+// filepath: /c:/Users/IT Jaringan/Desktop/proj/proj1/frontend/src/main.tsx
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 
-const container = document.getElementById('root');
-const root = createRoot(container!); // createRoot(container!) if you use TypeScript
-root.render(
-  <BrowserRouter>
+ReactDOM.render(
+  <React.StrictMode>
     <App />
-  </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
