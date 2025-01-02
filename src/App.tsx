@@ -9,6 +9,8 @@ import Navbar from './components/Navbar'; // Import the Navbar component
 import Menu2 from './pages/menu2';
 import Menu3 from './pages/menu3';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface User {
   id: number;
   name: string;
@@ -38,7 +40,7 @@ function App() {
   useEffect(() => {
     console.log('Fetching data...');
     setLoading(true);
-    fetch('http://localhost:5000/api/users')
+    fetch('{API_BASE_URL}/users')
       .then(response => response.json())
       .then(data => {
         console.log('Data fetched:', data);
@@ -51,7 +53,7 @@ function App() {
         setLoading(false);
       });
 
-    fetch('http://localhost:5000/api/devices')
+    fetch('${API_BASE_URL}/devices')
       .then(response => response.json())
       .then(data => {
         console.log('Devices fetched:', data);
@@ -110,7 +112,7 @@ function App() {
   };
 
   const saveUsers = (users: User[]) => {
-    fetch('http://localhost:5000/api/users', {
+    fetch('${API_BASE_URL}/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
