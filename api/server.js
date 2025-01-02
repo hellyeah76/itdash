@@ -1,50 +1,47 @@
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import Database from 'better-sqlite3';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
-const db = new Database('data.db', { verbose: console.log });
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    division TEXT,
-    problem TEXT,
-    solving TEXT,
-    date TEXT,
-    device TEXT
-  );
-`);
+const dataFilePath = path.join(__dirname, 'data.json');
+const devicesFilePath = path.join(__dirname, 'devices.json');
 
 app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/api/users', (req, res) => {
-  const users = db.prepare('SELECT * FROM users').all();
-  res.json(users);
+  fs.readFile(dataFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading data');
+    }
+    res.send(JSON.parse(data));
+  });
 });
 
 app.get('/api/devices', (req, res) => {
-  const devices = [
-    { id: 1, name: 'PC' },
-    { id: 2, name: 'Laptop' },
-    { id: 3, name: 'Printer' },
-    { id: 4, name: 'Mini PC' },
-    { id: 5, name: 'Mouse' }
-  ];
-  res.json(devices);
+  fs.readFile(devicesFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading devices');
+    }
+    res.send(JSON.parse(data));
+  });
 });
 
 app.post('/api/users', (req, res) => {
   const users = req.body;
-  db.prepare('DELETE FROM users').run();
-  const insert = db.prepare('INSERT INTO users (name, division, problem, solving, date, device) VALUES (?, ?, ?, ?, ?, ?)');
-  users.forEach(user => {
-    insert.run(user.name, user.division, user.problem, user.solving, user.date, user.device);
+  fs.writeFile(dataFilePath, JSON.stringify(users, null, 2), (err) => {
+    if (err) {
+      return res.status(500).send('Error saving data');
+    }
+    res.send('Data saved successfully');
   });
-  res.send('Data saved successfully');
 });
 
 app.listen(5000, () => {

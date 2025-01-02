@@ -40,11 +40,12 @@ function App() {
   useEffect(() => {
     console.log('Fetching data...');
     setLoading(true);
-
     fetch('/api/users')
       .then(response => response.json())
       .then(data => {
-        setUsers(data);
+        console.log('Data fetched:', data);
+        const sortedData = data.sort((a: User, b: User) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setUsers(sortedData);
         setLoading(false);
       })
       .catch(error => {
